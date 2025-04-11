@@ -2,11 +2,7 @@ import streamlit as st
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
-from matplotlib.animation import FuncAnimation
 from numba import njit
-from PIL import Image
-import tempfile
-import os
 
 st.set_page_config(layout="wide")
 
@@ -93,9 +89,8 @@ class IsingModel2D:
         metropolis_step(self._lattice, self.J, self.H, temperature)
 
     def run_monte_carlo_simulation(self, temperature, number_of_steps=1000, snapshot_interval=50):
-        self.initialize_lattice(random=True)
+        self.initialize_lattice(random=False, spin=1)
 
-        snapshots = []
         energies = []
         magnetizations = []
         steps = []
@@ -104,12 +99,11 @@ class IsingModel2D:
             self.perform_metropolis_step(temperature)
 
             if step % snapshot_interval == 0 or step == number_of_steps - 1:
-                snapshots.append(self.lattice.copy())
                 energies.append(self.average_energy)
                 magnetizations.append(self.average_magnetization)
                 steps.append(step)
 
-        return snapshots, energies, magnetizations, steps
+                yield self.lattice.copy(), energies[:], magnetizations[:], steps[:]
 
 
 # --- Streamlit UI ---
@@ -121,40 +115,51 @@ H = st.sidebar.slider("External Field H", 0.0, 1.0, 0.0, 0.05)
 T = st.sidebar.slider("Temperature T", 0.1, 10.0, 10.0, 0.05)
 nsteps = st.sidebar.slider("MC Steps", 100, 5000, 1000, 100)
 snapshot_interval = st.sidebar.slider("Snapshot Interval", 1, 100, 5, 5)
+run = st.sidebar.button("Run Simulation")
 
-if st.button("Run Simulation"):
+if run:
     with st.spinner("Running simulation..."):
         model = IsingModel2D(L, J, H)
-        snapshots, energies, magnetizations, steps = model.run_monte_carlo_simulation(
-            temperature=T, number_of_steps=nsteps, snapshot_interval=snapshot_interval
-        )
 
-        fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(10, 4))
-        fig.subplots_adjust(wspace=0.5)
+        col1, col2 = st.columns([1, 2])
+        with col1:
+            spin_placeholder = st.empty()
+        with col2:
+            chart_placeholder = st.empty()
 
-        im = ax1.imshow(snapshots[0], cmap='plasma', vmin=-1, vmax=1)
-        ax1.set_title("Spin Configuration")
-        ax1.axis('off')
+        chart_data = pd.DataFrame(columns=["Energy", "Magnetization"])
 
-        line_e, = ax2.plot([], [], label="Energy")
-        line_m, = ax2.plot([], [], label="Magnetization")
-        ax2.set_xlim(min(steps), max(steps))
-        ax2.set_ylim(min(min(energies), min(magnetizations)) * 1.1, max(max(energies), max(magnetizations)) * 1.1)
-        ax2.set_title("Energy & Magnetization")
-        ax2.set_xlabel("Step")
-        ax2.legend()
-        ax2.grid(True)
+        fig_chart, ax_chart = plt.subplots(figsize=(6, 3))
+#      ax_chart.set_title("Energy & Magnetization")
+        ax_chart.set_xlabel("Step")
+ #       ax_chart.set_ylabel("Value")
+        line_energy, = ax_chart.plot([], [], label="Energy", color="royalblue")
+        line_magnet, = ax_chart.plot([], [], label="Magnetization", color="crimson")
+        ax_chart.legend()
+        ax_chart.grid(True)
+        chart_plot = chart_placeholder.pyplot(fig_chart)
 
-        def animate(i):
-            im.set_data(snapshots[i])
-            line_e.set_data(steps[:i+1], energies[:i+1])
-            line_m.set_data(steps[:i+1], magnetizations[:i+1])
-            return [im, line_e, line_m]
+        all_steps = []
+        all_energies = []
+        all_magnetizations = []
 
-        ani = FuncAnimation(fig, animate, frames=len(snapshots), interval=200)
-        tmpfile = tempfile.NamedTemporaryFile(delete=False, suffix=".gif")
-        ani.save(tmpfile.name, writer='pillow', fps=10)
-        plt.close()
+        for lattice, energies, magnetizations, steps in model.run_monte_carlo_simulation(
+            temperature=T, number_of_steps=nsteps, snapshot_interval=snapshot_interval):
 
-        st.image(tmpfile.name, use_container_width=True)
-        os.unlink(tmpfile.name)
+            fig, ax = plt.subplots(figsize=(2, 2), dpi=100)
+            ax.imshow(lattice, cmap='plasma', vmin=-1, vmax=1)
+ #           ax.set_title(f"Step {steps[-1]}", fontsize=10)
+            ax.axis('off')
+            fig.tight_layout(pad=0.1)
+            spin_placeholder.pyplot(fig)
+            plt.close(fig)
+
+            all_steps.append(steps[-1])
+            all_energies.append(energies[-1])
+            all_magnetizations.append(magnetizations[-1])
+
+            line_energy.set_data(all_steps, all_energies)
+            line_magnet.set_data(all_steps, all_magnetizations)
+            ax_chart.relim()
+            ax_chart.autoscale_view()
+            chart_plot.pyplot(fig_chart)
