@@ -25,7 +25,7 @@ For which choice of parameters do you recover the **ideal solution** behavior?
 
 # Sidebar parameters
 st.sidebar.header("Model Parameters")
-Omega = st.sidebar.slider("Ω (J/mol)", min_value=-10000, max_value=20000, step=500, value=5000)
+Omega = st.sidebar.slider("Ω (J/mol)", min_value=-10000, max_value=20000, step=500, value=20000)
 T = st.sidebar.slider("Temperature T (K)", min_value=100, max_value=2000, step=100, value=800)
 
 # Composition range
