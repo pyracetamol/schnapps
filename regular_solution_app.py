@@ -38,7 +38,7 @@ H_mix = Omega * X_A * X_B
 G = H_mix + T * S_mix  # assuming mu_A0 = mu_B0 = 0
 
 # Plot
-fig, ax = plt.subplots(figsize=(8, 5))
+fig, ax = plt.subplots(figsize=(5, 5))
 ax.plot(X_A, G, label="Gibbs Free Energy $G$", lw=2)
 ax.plot(X_A, H_mix, label="Enthalpy of Mixing $H_{mix}$", ls="--")
 ax.plot(X_A, T * S_mix, label="Entropy Term $TS_{mix}$", ls=":")
