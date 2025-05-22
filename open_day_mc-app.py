@@ -49,20 +49,20 @@ class IsingModel2D:
 # --- UI ---
 st.title("Monte Carlo: Glücksspiel mit der Physik")
 
-st.sidebar.markdown("### Simulation Settings")
-L = st.sidebar.slider("Lattice Size", 16, 128, 64, 16)
-J = st.sidebar.slider("Coupling J", 0.1, 2.0, 1.0, 0.1)
-H = st.sidebar.slider("External Field H", 0.0, 1.0, 0.0, 0.05)
+st.sidebar.markdown("### Einstellungen")
+L = st.sidebar.slider("Gittergröße", 16, 128, 64, 16)
+J = st.sidebar.slider("Wechselwirkung J", 0.1, 2.0, 1.0, 0.1)
+H = st.sidebar.slider("Externes Feld H", 0.0, 1.0, 0.0, 0.05)
 
 st.sidebar.markdown("---")
-st.sidebar.markdown("### Color Legend")
-st.sidebar.markdown("🟡 = Spin up (↑)")  
-st.sidebar.markdown("🟣 = Spin down (↓)")
+st.sidebar.markdown("### Legende")
+st.sidebar.markdown("🟡 = Spin hoch (↑)")  
+st.sidebar.markdown("🟣 = Spin runter (↓)")
 
 st.sidebar.markdown("---")
-st.sidebar.markdown("### Preset Scenarios")
-cool = st.sidebar.button("🧊 Cool the system")
-heat = st.sidebar.button("🔥 Add heat")
+st.sidebar.markdown("### Szenarien")
+cool = st.sidebar.button("🧊 System kühlen")
+heat = st.sidebar.button("🔥 System erhitzen")
 
 # --- Layout ---
 col1, col2 = st.columns([1, 2])
@@ -97,7 +97,7 @@ def run_sweep(mode="cool"):
         return
 
     for lattice, T in model.run_temperature_sweep(T_values, steps_per_temp=500):
-        temp_placeholder.markdown(f"#### Temperature: {T:.2f}")
+        temp_placeholder.markdown(f"#### Temperatur: {T:.2f}")
         fig, ax = plt.subplots(figsize=(2, 2), dpi=100)
         ax.imshow(lattice, cmap="plasma", vmin=-1, vmax=1)
         ax.axis('off')

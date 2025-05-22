@@ -10,13 +10,13 @@ st.set_page_config(layout="wide")
 st.title("Cahn-Hilliard: spinodale Entmischung")
 
 # --- Sidebar controls ---
-st.sidebar.header("Simulation Parameters")
-c0 = st.sidebar.slider("Initial concentration", 0.1, 0.9, 0.5, 0.05)
-M = st.sidebar.slider("Mobility", 0.1, 2.0, 0.5, 0.1)
-kappa = st.sidebar.slider("Gradient coefficient", 0.1, 2.0, 0.6, 0.1)
-W = st.sidebar.slider("Free energy strength (W)", 0.1, 2.0, 1.0, 0.1)
-noise = st.sidebar.slider("Noise amplitude", 0.0, 0.5, 0.5, 0.05)
-Nsteps = st.sidebar.slider("Number of Time Steps", 500, 50000, 25000, 500)
+st.sidebar.header("Simulations-Parameter")
+c0 = st.sidebar.slider("Anfängliche Konzentration", 0.1, 0.9, 0.5, 0.05)
+M = st.sidebar.slider("Mobilität", 0.1, 2.0, 0.5, 0.1)
+kappa = st.sidebar.slider("Gradienten-Koeffizient", 0.1, 2.0, 0.6, 0.1)
+W = st.sidebar.slider("Stärke der freien Energie (W)", 0.1, 2.0, 1.0, 0.1)
+noise = st.sidebar.slider("Rausch-Amplitude", 0.0, 0.5, 0.5, 0.05)
+Nsteps = st.sidebar.slider("Anzahl der Schritte", 500, 50000, 25000, 500)
 snapshot_interval = 100
 rng_seed = 12345
 
@@ -27,7 +27,7 @@ dt = 0.1
 L = N * dx
 
 # --- Run Simulation Button ---
-run_sim = st.sidebar.button("Run Simulation")
+run_sim = st.sidebar.button("Simulation starten")
 
 # --- Layout placeholders ---
 col1, col2 = st.columns([1, 2])

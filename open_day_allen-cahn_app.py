@@ -13,15 +13,15 @@ dx = dy = 0.5
 snapshot_interval = 100
 
 # --- Sidebar controls ---
-st.sidebar.title("Allen-Cahn Parameters")
-M = st.sidebar.slider("Mobility (M)", 0.1, 10.0, 10.0)
-kappa = st.sidebar.slider("Gradient Energy Coefficient (kappa)", 0.01, 1.0, 0.2)
-A = st.sidebar.slider("Free Energy A", 0.1, 5.0, 1.0)
-B = st.sidebar.slider("Free Energy B", 0.1, 5.0, 1.0)
-ngrains = st.sidebar.slider("Number of Grains", 5, 50, 38)
-nsteps = st.sidebar.slider("Number of Steps", 1000, 30000, 2000, step=1000)
-snapshot_interval = st.sidebar.slider("Snapshot Interval", 0, 1000, 50, 50)
-run_button = st.sidebar.button("Run Simulation")
+st.sidebar.title("Allen-Cahn Parameter")
+M = st.sidebar.slider("Mobilität (M)", 0.1, 10.0, 10.0)
+kappa = st.sidebar.slider(r"Energiekoeffizient des Gradienten ($\kappa$)", 0.01, 1.0, 0.2)
+A = st.sidebar.slider("Freie Energie A", 0.1, 5.0, 1.0)
+B = st.sidebar.slider("Freie Energie B", 0.1, 5.0, 1.0)
+ngrains = st.sidebar.slider("Anzahl der Körner", 5, 50, 38)
+nsteps = st.sidebar.slider("Anzahl der Schritte", 1000, 30000, 2000, step=1000)
+snapshot_interval = st.sidebar.slider("Snapshot-Intervall", 0, 1000, 50, 50)
+run_button = st.sidebar.button("Simulation starten")
 
 # --- Microstructure initialization ---
 def procedural_voronoi_smoothed(Nx, Ny, ngrains, sigma, rng_seed):
