@@ -28,6 +28,7 @@ L = N * dx
 
 # --- Run Simulation Button ---
 run_sim = st.sidebar.button("Simulation starten")
+st.sidebar.page_link("http://localhost:8000/index.html", label="Übersicht", icon="🏠")
 
 # --- Layout placeholders ---
 col1, col2 = st.columns([1, 2])

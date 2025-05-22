@@ -63,6 +63,7 @@ st.sidebar.markdown("---")
 st.sidebar.markdown("### Szenarien")
 cool = st.sidebar.button("🧊 System kühlen")
 heat = st.sidebar.button("🔥 System erhitzen")
+st.sidebar.page_link("http://localhost:8000/index.html", label="Übersicht", icon="🏠")
 
 # --- Layout ---
 col1, col2 = st.columns([1, 2])

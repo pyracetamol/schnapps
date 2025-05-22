@@ -22,6 +22,7 @@ ngrains = st.sidebar.slider("Anzahl der Körner", 5, 50, 38)
 nsteps = st.sidebar.slider("Anzahl der Schritte", 1000, 30000, 2000, step=1000)
 snapshot_interval = st.sidebar.slider("Snapshot-Intervall", 0, 1000, 50, 50)
 run_button = st.sidebar.button("Simulation starten")
+st.sidebar.page_link("http://localhost:8000/index.html", label="Übersicht", icon="🏠")
 
 # --- Microstructure initialization ---
 def procedural_voronoi_smoothed(Nx, Ny, ngrains, sigma, rng_seed):

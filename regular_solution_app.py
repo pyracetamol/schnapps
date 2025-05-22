@@ -27,6 +27,7 @@ Für welche Wahl der Parameter ergibt sich das Verhalten einer **idealen Lösung
 st.sidebar.header("Modell-Parameter")
 Omega = st.sidebar.slider("Ω (J/mol)", min_value=-10000, max_value=20000, step=500, value=20000)
 T = st.sidebar.slider("Temperatur T (K)", min_value=100, max_value=2000, step=100, value=800)
+st.sidebar.page_link("http://localhost:8000/index.html", label="Übersicht", icon="🏠")
 
 # Composition range
 X_A = np.linspace(0.001, 0.999, 500)
