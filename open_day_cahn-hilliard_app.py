@@ -11,10 +11,10 @@ st.title("Cahn-Hilliard: spinodale Entmischung")
 
 # --- Sidebar controls ---
 st.sidebar.header("Simulations-Parameter")
-c0 = st.sidebar.slider("Anfängliche Konzentration", 0.1, 0.9, 0.5, 0.05)
-M = st.sidebar.slider("Mobilität", 0.1, 2.0, 0.5, 0.1)
-kappa = st.sidebar.slider("Gradienten-Koeffizient", 0.1, 2.0, 0.6, 0.1)
-W = st.sidebar.slider("Stärke der freien Energie (W)", 0.1, 2.0, 1.0, 0.1)
+c0 = st.sidebar.slider("Anfängliche Konzentration, $c$", 0.1, 0.9, 0.5, 0.05)
+M = st.sidebar.slider("Mobilität, $M$", 0.1, 2.0, 0.5, 0.1)
+kappa = st.sidebar.slider("Gradienten-Koeffizient, $\kappa$", 0.1, 2.0, 0.6, 0.1)
+W = st.sidebar.slider("Stärke der freien Energie, $W$", 0.1, 2.0, 1.0, 0.1)
 noise = st.sidebar.slider("Rausch-Amplitude", 0.0, 0.5, 0.5, 0.05)
 Nsteps = st.sidebar.slider("Anzahl der Schritte", 500, 50000, 25000, 500)
 snapshot_interval = 100
@@ -33,24 +33,27 @@ st.sidebar.page_link("http://localhost:8000/index.html", label="Übersicht", ico
 # --- Layout placeholders ---
 col1, col2 = st.columns([1, 2])
 micro_placeholder = col1.empty()
-info_box = col2.empty()
 
-# --- Info text replacing energy plot ---
-info_box.markdown(
-    """
-    **Spinodale Entmischung** ist ein natürlicher Prozess, bei dem sich ein Gemisch spontan in zwei getrennte Bereiche aufteilt.  
-    Die spinodale Entmischung spielt eine wichtige Rolle in vielen natürlichen und technischen Systemen.  
-    Man erkennt sie zum Beispiel daran, wie sich Öl und Essig in einer Vinaigrette trennen oder wie sich Polymermischungen, Metalle und sogar biologische Membranen in klar abgegrenzte Regionen organisieren.
+# --- Full Cahn–Hilliard equation and educational text ---
+with col2:
+    st.latex(r"""
+    \frac{\partial c}{\partial t} = \nabla \cdot \left[ M \nabla \left( W \left( 2c(1-c)(1 - 2c) \right) - \kappa \nabla^2 c \right) \right]
+    """)
+    st.markdown(
+        r"""
+        **Spinodale Entmischung** ist ein natürlicher Prozess, bei dem sich ein Gemisch spontan in zwei getrennte Bereiche aufteilt.
 
-    #### Wussten Sie schon?
+        Die obige **Cahn–Hilliard-Gleichung** beschreibt, wie sich die Konzentration \( c(\mathbf{x}, t) \) mit der Zeit entwickelt.  
 
-    In **Batterien** kann spinodale Entmischung schleichend langfristige Schäden verursachen.  
-    Zu langes oder zu starkes Laden kann dazu führen, dass sich die Materialien im Inneren der Batterie trennen.  
-    Diese Phasentrennung führt zu ungleichmäßigen Reaktionen, inneren Spannungen und Rissen - und löst eine Kette von Prozessen aus, die letztlich die Leistung der Batterie verschlechtern.
+        #### Wussten Sie schon?
 
-    Ein besseres Verständnis dieses Phänomens kann helfen, das Verhalten und die Lebensdauer von Materialien besser vorherzusagen!
-    """
-)
+        In **Batterien** kann spinodale Entmischung schleichend langfristige Schäden verursachen.  
+        Zu langes oder zu starkes Laden kann dazu führen, dass sich die Materialien im Inneren der Batterie trennen.  
+        Diese Phasentrennung führt zu ungleichmäßigen Reaktionen, inneren Spannungen und Rissen – und löst eine Kette von Prozessen aus, die letztlich die Leistung der Batterie verschlechtern.
+
+        Ein besseres Verständnis dieses Phänomens kann helfen, das Verhalten und die Lebensdauer von Materialien besser vorherzusagen!
+        """
+    )
 
 if run_sim:
     # --- Initialization ---

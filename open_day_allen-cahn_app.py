@@ -14,10 +14,10 @@ snapshot_interval = 100
 
 # --- Sidebar controls ---
 st.sidebar.title("Allen-Cahn Parameter")
-M = st.sidebar.slider("Mobilität (M)", 0.1, 10.0, 10.0)
-kappa = st.sidebar.slider(r"Energiekoeffizient des Gradienten ($\kappa$)", 0.01, 1.0, 0.2)
-A = st.sidebar.slider("Freie Energie A", 0.1, 5.0, 1.0)
-B = st.sidebar.slider("Freie Energie B", 0.1, 5.0, 1.0)
+M = st.sidebar.slider("Mobilität, $M$", 0.1, 10.0, 10.0)
+kappa = st.sidebar.slider(r"Gradienten-Koeffizient, $\kappa$", 0.01, 1.0, 0.2)
+A = st.sidebar.slider("Freie Energie, $A$", 0.1, 5.0, 1.0)
+B = st.sidebar.slider("Freie Energie, $B$", 0.1, 5.0, 1.0)
 ngrains = st.sidebar.slider("Anzahl der Körner", 5, 50, 38)
 nsteps = st.sidebar.slider("Anzahl der Schritte", 1000, 30000, 2000, step=1000)
 snapshot_interval = st.sidebar.slider("Snapshot-Intervall", 0, 1000, 50, 50)
@@ -45,7 +45,7 @@ def procedural_voronoi_smoothed(Nx, Ny, ngrains, sigma, rng_seed):
     return etas_smoothed, np.ones(ngrains, dtype=bool)
 
 # --- Allen-Cahn simulation with microstructure and education text ---
-def allen_cahn_simulation_live(M, kappa, A, B, ngrains, dt=0.005, nsteps=20000, snapshot_interval=100):
+def allen_cahn_simulation_live(M, kappa, A, B, ngrains, dt=0.005, nsteps=20000, snapshot_interval=100, micro_placeholder=None):
     kx = np.fft.fftfreq(N, d=dx) * 2 * np.pi
     ky = np.fft.fftfreq(N, d=dy) * 2 * np.pi
     KX, KY = np.meshgrid(kx, ky, indexing='ij')
@@ -56,27 +56,6 @@ def allen_cahn_simulation_live(M, kappa, A, B, ngrains, dt=0.005, nsteps=20000, 
         return A * (2.0 * B * eta_i * sum_eta_sq + eta_i**3 - eta_i)
 
     etas, glist = procedural_voronoi_smoothed(N, N, ngrains, sigma=1.5, rng_seed=1234)
-
-    col1, col2 = st.columns([1, 2])
-    micro_placeholder = col1.empty()
-
-    col2.markdown(
-        """
-        Die **Allen-Cahn-Gleichung** beschreibt, wie sich die innere Struktur eines Materials mit der Zeit verändert.  
-        Sie modelliert, wie kleine Körner in einem Festkörper allmählich schrumpfen und schließlich verschwinden.
-
-        Dieser Prozess, bekannt als **Kornvergröberung**, tritt in Metallen, Keramiken und sogar in biologischen Geweben auf.  
-        Wenn kleinere Körner verschwinden und größere wachsen, können sich die mechanischen Eigenschaften eines Materials – wie Festigkeit, Härte und Sprödigkeit – erheblich verändern.
-
-        #### Wussten Sie schon?
-
-        In **automobilen Katalysatoren** ist die Kornvergröberung eine der Ursachen dafür, dass die Effizienz mit der Zeit und unter Hitzeeinwirkung nachlässt.
-
-        Ein Verständnis dieser Entwicklung hilft Materialwissenschaftler/innen, leistungsfähigere Werkstoffe zu entwickeln - für alles von **Strahltriebwerken** bis hin zu **Mikrochips**.
-
-
-        """
-    )
 
     for step in range(1, nsteps + 1):
         for ig in range(ngrains):
@@ -102,8 +81,33 @@ def allen_cahn_simulation_live(M, kappa, A, B, ngrains, dt=0.005, nsteps=20000, 
             micro_placeholder.pyplot(fig)
             plt.close(fig)
 
-# --- Main ---
+# --- Main layout with two columns ---
 st.title("Allen-Cahn: Mikrostrukturevolution")
 
+col1, col2 = st.columns([1, 2])
+micro_placeholder = col1.empty()
+
+# Always display equation and explanation
+with col2:
+    st.latex(r"""
+    \frac{\partial \eta_i}{\partial t} = -M \left[ A \left( \eta_i^3 - \eta_i + 2B \eta_i \sum_{j \ne i} \eta_j^2 \right) - \kappa \nabla^2 \eta_i \right]
+    """)
+    st.markdown(
+        """
+        Die **Allen-Cahn-Gleichung** beschreibt, wie sich die innere Struktur eines Materials mit der Zeit verändert.  
+        Sie modelliert, wie kleine Körner in einem Festkörper allmählich schrumpfen und schließlich verschwinden.
+
+        Dieser Prozess, bekannt als **Kornvergröberung**, tritt in Metallen, Keramiken und sogar in biologischen Geweben auf.  
+        Wenn kleinere Körner verschwinden und größere wachsen, können sich die mechanischen Eigenschaften eines Materials – wie Festigkeit, Härte und Sprödigkeit – erheblich verändern.
+
+        #### Wussten Sie schon?
+
+        In **Dünnschicht-Solarzellen** aus polykristallinem Silizium führt gezielte Kornvergröberung bei der Wärmebehandlung zu einer besseren Leitfähigkeit und höherem Wirkungsgrad – ein direkter Vorteil durch das Verstehen und Steuern von Mikrostrukturen.
+
+        Ein Verständnis dieser Entwicklung hilft Materialwissenschaftler/innen, leistungsfähigere Werkstoffe zu entwickeln – für alles von **Strahltriebwerken** bis hin zu **Mikrochips**.
+        """
+    )
+
+# Only run simulation if button is pressed
 if run_button:
-    allen_cahn_simulation_live(M, kappa, A, B, ngrains, nsteps=nsteps, snapshot_interval=snapshot_interval)
+    allen_cahn_simulation_live(M, kappa, A, B, ngrains, nsteps=nsteps, snapshot_interval=snapshot_interval, micro_placeholder=micro_placeholder)
