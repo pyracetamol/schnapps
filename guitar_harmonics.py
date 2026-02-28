@@ -190,7 +190,7 @@ ax_wave.plot(antinodes_x, antinode_y, "^",
 
 ax_wave.set_xlabel("Position along string  x  (m)")
 ax_wave.set_ylabel("Displacement  y  (m)")
-ax_wave.set_title(f"Standing Wave Profile — {harmonic_labels[n]} harmonic  (t = 0)")
+ax_wave.set_title(f"Standing Wave Profile: {harmonic_labels[n]} harmonic  (t = 0)")
 ax_wave.tick_params(colors="#333")
 for spine in ax_wave.spines.values():
     spine.set_edgecolor("#bbb")
