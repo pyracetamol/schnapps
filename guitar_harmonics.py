@@ -27,9 +27,11 @@ mpl.rcParams.update({
 })
 
 # ── Physics constants ────────────────────────────────────────────────────────
-A          = 0.25
-L          = 25.5
-T_over_rho = 41.77
+# Standard guitar scale length (Fender), open low E string (E2 = 82.407 Hz)
+# T/ρ back-calculated from f₁ = (1/2L)√(T/ρ)  →  T/ρ = (2Lf₁)²
+A          = 0.003          # amplitude (metres — visually scaled in canvas)
+L          = 0.648          # string length (metres)
+T_over_rho = 11406.1272     # T/ρ (m²/s²), gives f₁ ≈ 82.41 Hz (low E2)
 
 def wavelength(n):   return 2 * L / n
 def angular_freq(n): return (n * np.pi / L) * np.sqrt(T_over_rho)
@@ -45,8 +47,8 @@ FORCED_NODES = {
 }
 
 FRET_POSITIONS = [
-    24.069, 22.718, 21.443, 20.239, 19.103,
-    18.031, 17.019, 16.064, 15.162, 14.311, 13.508, 12.75,
+    0.61163, 0.57730, 0.54490, 0.51432, 0.48545,
+    0.45821, 0.43249, 0.40821, 0.38530, 0.36368, 0.34327, 0.32400,
 ]
 
 # ── Colours ──────────────────────────────────────────────────────────────────
@@ -186,9 +188,9 @@ antinode_y  = [(2 * A) * np.sin((2 * np.pi * xi) / lam) for xi in antinodes_x]
 ax_wave.plot(antinodes_x, antinode_y, "^",
              color=ORANGE, markersize=8, label="antinodes", zorder=5)
 
-ax_wave.set_xlabel("Position along string  x")
-ax_wave.set_ylabel("Displacement  y")
-ax_wave.set_title(f"Standing Wave Profile: {harmonic_labels[n]} harmonic  (t = 0)")
+ax_wave.set_xlabel("Position along string  x  (m)")
+ax_wave.set_ylabel("Displacement  y  (m)")
+ax_wave.set_title(f"Standing Wave Profile — {harmonic_labels[n]} harmonic  (t = 0)")
 ax_wave.tick_params(colors="#333")
 for spine in ax_wave.spines.values():
     spine.set_edgecolor("#bbb")
@@ -209,8 +211,8 @@ ax_rc.text(0.5, 0.92, title_str,
            va="top", ha="center", fontsize=12, fontweight="bold", color="#222")
 
 left_lines  = [
-    f"$L = {L}$",
-    f"$\\lambda = {lam:.3f}$",
+    f"$L = {L}$ m",
+    f"$\\lambda = {lam:.3f}$ m",
 ]
 right_lines = [
     f"$\\omega = {omega:.3f}$ rad/s",
