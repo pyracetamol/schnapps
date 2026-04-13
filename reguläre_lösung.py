@@ -19,7 +19,7 @@ st.title("Reguläres Lösungsmodell")
 st.markdown(
     """
 Diese App visualisiert die Thermodynamik einer binären Legierung mithilfe des **regulären Lösungsmodells**.
-Sie können erkunden, wie der **Wechselwirkungsparameter** ($\Omega$) und die **Temperatur** ($T$) folgende Größen beeinflussen:
+Ihr könnt erkunden, wie der **Wechselwirkungsparameter** ($\Omega$) und die **Temperatur** ($T$) folgende Größen beeinflussen:
 - Gibbs-Energie ($G$)
 - Mischungsenthalpie ($H_{\mathrm{mix}}$)
 - Entropieterm ($TS_{\mathrm{mix}}$)
@@ -84,8 +84,8 @@ st.markdown(
     """
 ### Was passiert physikalisch?
 
-Stell dir vor, du mischst zwei Metalle A und B bei hoher Temperatur zu einer homogenen
-Legierung – alles schön gleichmäßig verteilt. Nun kühlst du die Legierung ab.
+Stellt euch vor, ihr mischt zwei Metalle A und B bei hoher Temperatur zu einer homogenen
+Legierung – alles schön gleichmäßig verteilt. Nun kühlt ihr die Legierung ab.
 Je nach Zusammensetzung und Wechselwirkung zwischen den Atomen kann das System instabil
 werden und sich **spontan** in zwei Phasen aufteilen: eine A-reiche und eine B-reiche Phase.
 
@@ -132,13 +132,13 @@ und die Temperatur niedrig genug ist, dass der Enthalpieterm dominiert.
 
 ---
 
-### Zum Ausprobieren
+### Zum Ausprobieren 
 
-Ziehe die Regler und beobachte die rote Zone:
+Zieht die Regler und beobachtet die rote Zone:
 
 | Frage | Hinweis |
 |---|---|
-| Ab welchem $\\Omega$ erscheint die spinodale Zone? | Erhöhe $\\Omega$ langsam von 0 |
+| Ab welchem $\\Omega$ erscheint die spinodale Zone? | Erhöht $\\Omega$ langsam von 0 |
 | Wie verändert höhere Temperatur die Zone? | Entropie wird wichtiger |
 | Warum gibt es bei negativem $\\Omega$ keine Entmischung? | Was bedeutet $\\Omega < 0$ physikalisch? |
 """
